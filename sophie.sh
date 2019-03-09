@@ -1,7 +1,7 @@
 #!/bin/sh
 
 
-# S0PH1E
+#===================== S0PH1E========================
 #
 # Autor: Erick Formaggio (erick.beltrami@gmail.com)
 # 
