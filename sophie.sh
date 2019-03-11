@@ -12,7 +12,7 @@
 # Descricao: 	Testa um site para varios itens de seguranca.
 # 		Funcionamento somente no Kali Linux, pois ele precisa dos programas instalados.
 
-DATE=$(date +%D | tr -d /)
+DATE=$(date +%D-%H%M | tr -d /)
 
 dominiopuro ()
 {
@@ -66,8 +66,8 @@ clear
 dominiopuro
 echo "**************************************************************"
 echo "WHOIS"
-whois "$host" > Testes/"$host"/"$host"_whois.txt
-cat Testes/"$host"/"$host"_whois.txt
+whois "$host" > Testes/"$host"/"$host"_whois-$DATE.txt
+cat Testes/"$host"/"$host"_whois-$DATE.txt
 ;;
 
 # Opcao 3 Todos os testes
@@ -77,37 +77,37 @@ dominiopuro
 
 echo "**************************************************************"
 echo "1. HOST"
-host "$host" > Testes/"$host"/"$host"_host.txt
-cat Testes/"$host"/"$host"_host.txt 
+host "$host" > Testes/"$host"/"$host"_host-$DATE.txt
+cat Testes/"$host"/"$host"_host-$DATE.txt 
 sleep 5
 
 clear
 echo "**************************************************************"
 echo "2. DIG"
-dig "$host" -t mx > Testes/"$host"/"$host"_dig.txt
-cat Testes/"$host"/"$host"_dig.txt
+dig "$host" -t mx > Testes/"$host"/"$host"_dig-$DATE.txt
+cat Testes/"$host"/"$host"_dig-$DATE.txt
 sleep 5 
 
 clear
 echo "**************************************************************"
 echo "3. WHOIS"
-whois "$host" > Testes/"$host"/"$host"_whois.txt
-cat Testes/"$host"/"$host"_whois.txt
+whois "$host" > Testes/"$host"/"$host"_whois-$DATE.txt
+cat Testes/"$host"/"$host"_whois-$DATE.txt
 sleep 5
 
 clear
 echo "**************************************************************"
 echo "4. NIKTO"
 echo "Analisando..."
-nikto -h "$host" > Testes/"$host"/"$host"_nikto.txt
-cat Testes/"$host"/"$host"_nikto.txt
+nikto -h "$host" > Testes/"$host"/"$host"_nikto-$DATE.txt
+cat Testes/"$host"/"$host"_nikto-$DATE.txt
 sleep 5
 
 clear
 echo "**************************************************************"
 echo "5. THE HARVESTER"
-theharvester -d "$host" -b google > Testes/"$host"/"$host"_tharvester.txt
-cat Testes/"$host"/"$host"_tharvester.txt
+theharvester -d "$host" -b google > Testes/"$host"/"$host"_tharvester-$DATE.txt
+cat Testes/"$host"/"$host"_tharvester-$DATE.txt
 
 
 clear
@@ -121,7 +121,7 @@ nmap -Pn --script vuln "$host" -v -oS  Testes/"$host"/"$host"_nmap-vulnerabilida
 clear
 echo "**************************************************************"
 echo "7. DETERMINANDO LOCAL SERVER"
-nmap -sV --script ip-geolocation-geoplugin "$host" > Testes/"$host"/"$host"_localizacao.txt
+nmap -sV --script ip-geolocation-geoplugin "$host" > Testes/"$host"/"$host"_localizacao-$DATE.txt
 ;;
 
 
@@ -148,7 +148,7 @@ clear
 dominiopuro
 echo "**************************************************************"
 echo "Iniciando teste..."
-nmap -sV --script ip-geolocation-geoplugin "$host" > Testes/"$host"/"$host"_localizacao.txt
+nmap -sV --script ip-geolocation-geoplugin "$host" > Testes/"$host"/"$host"_localizacao-$DATE.txt
 ;;
 
 #ANÁLISE DE BLOGS
@@ -164,7 +164,7 @@ echo "Iniciando... aguarde pois pode demorar alguns minutos"
 
 #blog=$host | sed 's/[.|/d]/_/g' - comando que eu estava testando para transformar ponto em underline
 
-wpscan --url "$host" > Testes/blog_"$nomeempresablog"/"$nomeempresablog"_blog-$DATE.txt
+wpscan --url "$host" --random-agent > Testes/blog_"$nomeempresablog"/"$nomeempresablog"_blog-$DATE.txt
 ;;
 
 #Vulnerabilidades recentes
