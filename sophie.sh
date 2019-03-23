@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 
 #===================== S0PH1E========================
@@ -31,7 +31,7 @@ read host
 mkdir -p Testes/blog_"$nomeempresablog"
 }
 
-# Opcoes
+# Chama menu de opções
 clear
 
 echo "Escolha uma das alternativas:"
@@ -46,18 +46,14 @@ echo "8 - Vulnerabilidades recentes"
 
 read opcao
 
+
 case $opcao in
 
 # Opcao 1 Teste de Vulnerabilidades
 1)
 clear
 dominiopuro
-echo "=================================================="
-echo "NMAP VULNERABILIDADES"
-echo "=================================================="
-echo "Analisando... O teste pode demorar alguns minutos"
-echo "Se quiser acompanhar os detalhes, em outra aba digite: tcpdump host ip-do-site -v"
-nmap -Pn --script vuln "$host" -v -oS  Testes/"$host"/"$host"_nmap-vulnerabilidades-$DATE.txt
+source nmapvul.sh
 ;;
 
 # Opcao 2 Dados de dominio	
@@ -110,13 +106,7 @@ theharvester -d "$host" -b google > Testes/"$host"/"$host"_tharvester-$DATE.txt
 cat Testes/"$host"/"$host"_tharvester-$DATE.txt
 
 
-clear
-echo "=================================================="
-echo "6.NMAP VULNERABILIDADES"
-echo "=================================================="
-echo "Analisando... O teste pode demorar alguns minutos"
-echo "Se quiser acompanhar os detalhes, em outra aba digite: tcpdump host ip-do-site -v"
-nmap -Pn --script vuln "$host" -v -oS  Testes/"$host"/"$host"_nmap-vulnerabilidades-$DATE.txt
+source nmapvul.sh
 
 clear
 echo "**************************************************************"
@@ -164,7 +154,7 @@ echo "Iniciando... aguarde pois pode demorar alguns minutos"
 
 #blog=$host | sed 's/[.|/d]/_/g' - comando que eu estava testando para transformar ponto em underline
 
-wpscan --url "$host" --random-agent > Testes/blog_"$nomeempresablog"/"$nomeempresablog"_blog-$DATE.txt
+y | wpscan --url "$host" --random-agent > Testes/blog_"$nomeempresablog"/"$nomeempresablog"_blog-$DATE.txt
 ;;
 
 #Vulnerabilidades recentes
