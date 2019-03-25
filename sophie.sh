@@ -71,47 +71,24 @@ cat Testes/"$host"/"$host"_whois-$DATE.txt
 clear
 dominiopuro
 
-echo "**************************************************************"
-echo "1. HOST"
-host "$host" > Testes/"$host"/"$host"_host-$DATE.txt
-cat Testes/"$host"/"$host"_host-$DATE.txt 
-sleep 5
+#Inicia a busca de dados de registro de domínio
+source whois.sh
 
-clear
-echo "**************************************************************"
-echo "2. DIG"
-dig "$host" -t mx > Testes/"$host"/"$host"_dig-$DATE.txt
-cat Testes/"$host"/"$host"_dig-$DATE.txt
-sleep 5 
+#Inicia busca de dados de domínio
+source dig.sh
 
-clear
-echo "**************************************************************"
-echo "3. WHOIS"
-whois "$host" > Testes/"$host"/"$host"_whois-$DATE.txt
-cat Testes/"$host"/"$host"_whois-$DATE.txt
-sleep 5
+#Procurando local do servidor de hospedagem
+source localserver.sh
 
-clear
-echo "**************************************************************"
-echo "4. NIKTO"
-echo "Analisando..."
-nikto -h "$host" > Testes/"$host"/"$host"_nikto-$DATE.txt
-cat Testes/"$host"/"$host"_nikto-$DATE.txt
-sleep 5
+#Busca por email e outros dados
+source harvester.sh
 
-clear
-echo "**************************************************************"
-echo "5. THE HARVESTER"
-theharvester -d "$host" -b google > Testes/"$host"/"$host"_tharvester-$DATE.txt
-cat Testes/"$host"/"$host"_tharvester-$DATE.txt
-
-
+#Inicia Teste de Vulnerabilidade
 source nmapvul.sh
 
-clear
-echo "**************************************************************"
-echo "7. DETERMINANDO LOCAL SERVER"
-nmap -sV --script ip-geolocation-geoplugin "$host" > Testes/"$host"/"$host"_localizacao-$DATE.txt
+#Inicia Teste do Nikto
+source nikto.sh
+
 ;;
 
 
