@@ -8,9 +8,11 @@
 # Criacao: 	05/12/2016
 # Atualizacao:	
 # 04/03/2019 - aplicações de função "dominios" e um teste só para blog. 
-# 07/03/2019 - o ataque slowloris ainda não está funcionando
+# 07/03/2019 - o ataque slowloris ainda não está funcionando.
+# 24/03/2019 - separando programas em módulos.
 # Descricao: 	Testa um site para varios itens de seguranca.
 # 		Funcionamento somente no Kali Linux, pois ele precisa dos programas instalados.
+#====================================================
 
 DATE=$(date +%D-%H%M | tr -d /)
 
@@ -42,31 +44,29 @@ echo "4 - DOS atack teste"
 echo "5 - Ataque Slowloris"
 echo "6 - Localizar"
 echo "7 - Análise de blogs"
-echo "8 - Vulnerabilidades recentes"
+#echo "8 - Vulnerabilidades recentes"
 
 read opcao
 
 
 case $opcao in
 
-# Opcao 1 Teste de Vulnerabilidades
+#============= Opcao 1 Teste de Vulnerabilidades ==========
 1)
 clear
 dominiopuro
 source nmapvul.sh
 ;;
 
-# Opcao 2 Dados de dominio	
+#============= Opcao 2 Dados de dominio ===================	
 2)
 clear
 dominiopuro
-echo "**************************************************************"
-echo "WHOIS"
-whois "$host" > Testes/"$host"/"$host"_whois-$DATE.txt
-cat Testes/"$host"/"$host"_whois-$DATE.txt
+#Inicia a busca de dados de registro de domínio
+source whois.sh
 ;;
 
-# Opcao 3 Todos os testes
+#============= Opcao 3 Todos os testes ====================
 3)
 clear
 dominiopuro
@@ -89,10 +89,24 @@ source nmapvul.sh
 #Inicia Teste do Nikto
 source nikto.sh
 
+clea
+clear
+read -r -p "Quer analisar a segurança do blog? [y/N] " response
+case "$response" in
+    [yY][eE][sS]|[yY])
+        dominioblog
+	clear
+	source blogproof.sh
+        ;;
+    *)
+        clear
+	echo "Teste Completo"
+        ;;
+esac
+
 ;;
 
-
-# OPCAO 4 TESTE SLOWLORIS
+#============= TESTE SLOWLORIS ============================
 4)
 clear
 dominiopuro
@@ -101,7 +115,7 @@ echo "Iniciando teste..."
 nmap --script http-slowloris --max-parallelism 400 "$host" -v
 ;;
 
-# OPCAO 5 ATAQUE SLOWLORIS
+#============= ATAQUE SLOWLORIS ===========================
 5)
 clear
 dominiopuro
@@ -110,28 +124,20 @@ echo "Iniciando ataque..."
 ./slowloris.pl -dns "$host"
 ;;
 
+
+#============= Determinando Local Server ==================
 6)
 clear
 dominiopuro
-echo "**************************************************************"
-echo "Iniciando teste..."
-nmap -sV --script ip-geolocation-geoplugin "$host" > Testes/"$host"/"$host"_localizacao-$DATE.txt
+source localserver.sh
 ;;
 
-#ANÁLISE DE BLOGS
+
+#============= Análise de blogs ===========================
 7)
 clear
 dominioblog
-
-#PRIMEIRO VAI ATUALIZAR O WPSCAN
-echo "**************************************************************"
-echo "7. WPSCAN"
-echo "Iniciando... aguarde pois pode demorar alguns minutos"
-#wpscan --update
-
-#blog=$host | sed 's/[.|/d]/_/g' - comando que eu estava testando para transformar ponto em underline
-
-y | wpscan --url "$host" --random-agent > Testes/blog_"$nomeempresablog"/"$nomeempresablog"_blog-$DATE.txt
+source blogproof.sh
 ;;
 
 #Vulnerabilidades recentes
